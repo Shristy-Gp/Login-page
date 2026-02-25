@@ -1,0 +1,267 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    background-image: url("background1.jpg");
+    height: 100vh;
+    width: 100vw;   
+    background-size: cover;
+    background-position: center;
+    /* overflow-x: hidden; */
+    
+    
+}
+.main{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container{
+    margin: 40px ;
+    max-width: 700px;
+    color: #ffffff;
+}
+
+.container h2 {
+    font-weight: bolder;
+    font-family: cursive;
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+.container p{
+    padding-left: 10px;
+    font-family: cursive;
+    font-size: 18px;
+}
+
+.login{
+    position: fixed;
+    right: -300px;
+    top: 5%;
+    height: 650px;
+    width: 650px;
+    background-color: rgba(255, 255, 255, 0.95);
+    
+    border-radius: 50%;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: slideIn 1s ease forwards;
+    animation-delay: 0.5s; 
+}
+
+@keyframes slideIn {
+    from {
+        right: -400px;
+        opacity: 0;
+    }
+    to {
+        right: -200px;
+        opacity: 1;
+    }
+}
+
+.content{
+    width: 60%;
+    text-align: left;
+}
+.login h2{
+    position: absolute;
+    top: 16%;
+    right: 45%;
+
+    font-size: 60px;
+    color: #325796;
+    /* margin-bottom: 60px; */
+}
+
+.input{
+    margin-bottom: 15px;
+    position: relative;
+    top: 25px;
+}
+
+.input input{
+    width: 70%;
+    height: 50px;
+    border-radius: 20px;
+    border: 1px solid grey;
+    padding: 10px;
+    outline: none;
+    font-size: 16px;
+}
+
+.input input:focus {
+    border-color: #29487d;
+    box-shadow: 0 0 8px rgba(41, 72, 125, 0.4);
+}
+.option{
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+.log{
+    width: 70%;
+    height: 50px;
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 15px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    background-color: #29487d;
+    cursor: pointer;
+    
+}
+button:hover{
+    background-color: #233d69;
+    box-shadow: 0 0 8px rgba(41, 72, 125, 0.4) ;
+    transform: scale(1.03);
+    /* transform: translateY(-2px); */
+}
+
+.register{
+    width: 70%;
+    text-align: center;
+    margin-top: 20px;
+}
+a{
+    text-decoration: none;
+    color: #29487d;
+}
+
+a:hover{
+    color: #192c4c;
+    text-decoration: underline;
+}
+
+
+
+
+
+
+.content1{
+    width: 60%;
+    text-align: left;
+    margin-top: 50px;
+}
+.content1 h2{
+    position: absolute;
+    top: 16%;
+    right: 45%;
+    
+    font-size: 50px;
+    color: #325796;
+    /* margin-bottom: 60px; */
+}
+.input1{
+        margin-bottom: 10px;
+}
+.input1 input{
+        width: 70%;
+        height: 40px;
+        border-radius: 20px;
+        border: 1px solid grey;
+        padding: 10px;
+        outline: none;
+        font-size: 16px;
+        
+}
+.input1 input:hover {
+    border-color: #29487d;
+    box-shadow: 0 0 8px rgba(41, 72, 125, 0.4);
+}
+
+.terms{
+        width: 70%;
+        margin-top: 0px;
+        margin-bottom: 10px;
+}
+.reg{
+        width: 70%;
+        height: 50px;
+        border-radius: 20px;
+        padding: 10px;
+        /* margin-top: 8px; */
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: #ffffff;
+        background-color: #29487d;
+        cursor: pointer; 
+}
+    
+    @media (max-width: 950px) {
+        
+        .login {
+            width: 550px;
+            height: 550px;
+            position: absolute;
+            left: 15vw;
+            top: 300px;
+            animation: slideMobile 1s ease forwards;
+            animation-delay: 0.5s;
+        }
+        .content{
+            width: 70%;
+            text-align: center;
+        }
+        .login h2{
+            top: 12%;
+            right: 40%;
+    
+            font-size: 50px;
+    
+        }
+        .input input{
+             height: 45px;
+             width: 80%;
+        }
+        .option{
+            padding-left: 8%;
+            width: 90%;
+        }
+        .log{
+            width: 80%;
+        }
+        .register{
+            width: 100%;
+        }
+        .content1{
+            width: 70%;
+            text-align: center;
+        }
+        .content1 h2{
+            top: 12%;
+            right: 35%;
+    
+            font-size: 50px;
+        }
+        .terms{
+            width: 90%;
+        }
+        
+        
+       
+    
+        @keyframes slideMobile {
+            from {
+                right: -350px;
+            }
+            to {
+                right: -120px;
+            }
+        }
+    }
