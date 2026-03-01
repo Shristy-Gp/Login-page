@@ -83,6 +83,10 @@ body{
     }
 }
 
+.hidden{
+    display : none;
+}
+
 .content{
     width: 60%;
     text-align: left;
