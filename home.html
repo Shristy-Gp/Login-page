@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="home_style.css">
 </head>
 <body>
-    
+        <!-- navbar -->
+
     <div class="nav">
         <div class="nav-left">
             <svg class="plus" viewBox="0 0 126 81" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,21 +41,174 @@
                     </div>
                     
                 </div>
-            </div>
+        </div>
     </div>
-    <section class="sidebar">
-            <div onclick="show('profile')">Profile</div>
-            <div onclick="show('dashboard')">Dashboard</div>
-            <div onclick="show('medicines')">Medicines</div>
-            <div onclick="show('inventory')">Inventory</div>
+    <!-- sidebar -->
+     <div class="main">
+
+         <aside class="sidebar">
+             <div onclick="show('admin-profile')">Profile</div>
+             <div onclick="show('dashboard')">Dashboard</div>
+             <div onclick="show('medicine')">Medicines</div>
+             <div onclick="show('inventory')">Inventory</div>
             <div onclick="show('billing')">Billing</div>
-            <div onclick="show('sales')">Sales</div>
+            <div onclick="show('supplier')">Suppliers</div>
             <div onclick="show('purchase')">Purchase</div>
             <div onclick="show('reports')">Reports</div>
             <div class="footer">Setting</div>
-    </section>
-   
+        </aside>
+        
+        
+        
+        
+        
+        <div class="main-content">
+             <!-- profile -->
+              <div class="admin-profile">Abd</div>
+             <!-- medicines -->
+             <div class ="medicine hidden">
+                 <h2>Medicine list</h2>
+                 <table>
+                     <thead>
+                         <tr>
+                             <th scope="col">medicine id</th>
+                            <th scope="col">medicine name</th>
+                            <th scope="col">category</th>
+                            <th scope="col">purchase price</th>
+                            <th scope="col">sell price</th>
+                            <th scope="col">expiry</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >101</td>
+                            <td>Paracetamol</td>
+                            <td>Tablet</td>
+                            <td>100$</td>
+                            <td>105$</td>
+                            <td>7</td>
+                            
+                        </tr>
+                        <tr>
+                            <td >102</td>
+                            <td>vitamin D</td>
+                            <td>injection</td>
+                            <td>20$</td>
+                            <td>23$</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td >103</td>
+                            <td>vitamin C</td>
+                            <td>syrup</td>
+                            <td>30$</td>
+                            <td>40$</td>
+                            <td>5</td>
+                            
+                        </tr>
+                        <tr>
+                            <td>104</td>
+                            <td>ors</td>
+                            <td>injection</td>
+                            <td>10$</td>
+                            <td>12$</td>
+                            <td>23</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- dashboard -->
+            
+            <div class="dashboard hidden">
+                <h2>Dashboard</h2>
+                <div class="card">
+                    
+                    <div class="tot-revenue">
+                        <p>Total Revenue</p>
+                        <h3>$5600</h3>
+                    </div>
+                    <div class="today-sale">
+                        <p>Today's Sale</p>
+                        <h3>$100</h3>
+                    </div>
+                    <div class="stock-alert">
+                        <p>Stock alert</p>
+                        <h3>5</h3>
+                    </div>
+                    <div class="expiry-alert">
+                        <p>Expiry alert</p>
+                        <h3>2</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="supplier hidden">
+                <h2>Suppliers detail</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Pending bal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#1</td>
+                            <td>John Doe</td>
+                            <td>882219283</td>
+                            <td>johndoe@abc.in</td>
+                            <td>new york</td>
+                            <td>$15</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<!-- inventory -->
+            <div class="inventory hidden">
+                <h2>Stocks</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">medicine id</th>
+                            <th scope="col">medicine name</th>
+                            <th scope="col">category</th>
+                            <th scope="col">stock</th>
+                            <th scope="col">supplier</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >101</td>
+                            <td>Paracetamol</td>
+                            <td>Tablet</td>
+                            <td>300</td>
+                            <td>John Doe</td>
+                        </tr>
+                        <tr>
+                            <td >102</td>
+                            <td>vitamin D</td>
+                            <td>injection</td>
+                            <td>9</td>
+                            <td>John Doe</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
     
+        </div>
+    </div>
+
+    
+    
+    
+    <script src="home.js"></script>
     
 </body>
 </html>
