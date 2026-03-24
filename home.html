@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="home_style.css">
 </head>
 <body>
-        <!-- navbar -->
-
+        <!-- -------------------------------------------navbar------------------------------------------ -->
     <div class="nav">
         <div class="nav-left">
             <svg class="plus" viewBox="0 0 126 81" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,7 +16,6 @@
             </svg>
             <h2>Medix</h2>
         </div>
-
         <div class="nav-search">
             <svg class="search-icon" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M45.5291 41.2864C53.4379 31.2778 52.7719 16.7095 43.5312 7.46878C33.5729 -2.48959 17.4271 -2.48959 7.46878 7.46878C-2.48959 17.4271 -2.48959 33.5729 7.46878 43.5312C16.7095 52.7719 31.2778 53.4379 41.2864 45.5291L52.0165 56.2591C53.1881 57.4307 55.0876 57.4307 56.2591 56.2591C57.4307 55.0876 57.4307 53.1881 56.2591 52.0165L45.5291 41.2864ZM39.2886 11.7114C46.9038 19.3266 46.9038 31.6734 39.2886 39.2886C31.6734 46.9038 19.3266 46.9038 11.7114 39.2886C4.09619 31.6734 4.09619 19.3266 11.7114 11.7114C19.3266 4.0962 31.6734 4.09619 39.2886 11.7114Z" fill="#262626"/>
@@ -43,108 +41,318 @@
                 </div>
         </div>
     </div>
-    <!-- sidebar -->
-     <div class="main">
+    <!-- -----------------------------------------------------sidebar------------------------------------------------ -->
+    <div class="main">
 
-         <aside class="sidebar">
+        <aside class="sidebar">
              <div onclick="show('admin-profile')">Profile</div>
              <div onclick="show('dashboard')">Dashboard</div>
              <div onclick="show('medicine')">Medicines</div>
              <div onclick="show('inventory')">Inventory</div>
-            <div onclick="show('billing')">Billing</div>
+            <div onclick="show('billing')">Sales & Billing</div>
             <div onclick="show('supplier')">Suppliers</div>
-            <div onclick="show('purchase')">Purchase</div>
             <div onclick="show('reports')">Reports</div>
-            <div class="footer">Setting</div>
+            <div class="footer" onclick="show('setting')">Setting</div>
         </aside>
         
-        
-        
-        
-        
+        <!-- -----------------------------------------------main-content------------------------------------------ -->
         <div class="main-content">
-             <!-- profile -->
-              <div class="admin-profile">Abd</div>
-             <!-- medicines -->
-             <div class ="medicine hidden">
-                 <h2>Medicine list</h2>
-                 <table>
-                     <thead>
-                         <tr>
-                             <th scope="col">medicine id</th>
-                            <th scope="col">medicine name</th>
-                            <th scope="col">category</th>
-                            <th scope="col">purchase price</th>
-                            <th scope="col">sell price</th>
-                            <th scope="col">expiry</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td >101</td>
-                            <td>Paracetamol</td>
-                            <td>Tablet</td>
-                            <td>100$</td>
-                            <td>105$</td>
-                            <td>7</td>
-                            
-                        </tr>
-                        <tr>
-                            <td >102</td>
-                            <td>vitamin D</td>
-                            <td>injection</td>
-                            <td>20$</td>
-                            <td>23$</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td >103</td>
-                            <td>vitamin C</td>
-                            <td>syrup</td>
-                            <td>30$</td>
-                            <td>40$</td>
-                            <td>5</td>
-                            
-                        </tr>
-                        <tr>
-                            <td>104</td>
-                            <td>ors</td>
-                            <td>injection</td>
-                            <td>10$</td>
-                            <td>12$</td>
-                            <td>23</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                <!-- --------------------profile-------------- -->
+              <div class="admin-profile hidden" >Abd</div>
+
+                <!------------------------ dashboard -------------------->
             
-            <!-- dashboard -->
-            
-            <div class="dashboard hidden">
+            <div class="dashboard">
                 <h2>Dashboard</h2>
                 <div class="card">
                     
                     <div class="tot-revenue">
                         <p>Total Revenue</p>
-                        <h3>$5600</h3>
+                        <h3>INR 5600</h3>
                     </div>
                     <div class="today-sale">
                         <p>Today's Sale</p>
-                        <h3>$100</h3>
+                        <h3>INR 100</h3>
                     </div>
-                    <div class="stock-alert">
+                    <div class="tot-med">
+                        <p>Total medicines</p>
+                        <h3>500</h3>
+                    </div>
+                    <div class="low-stock">
                         <p>Stock alert</p>
                         <h3>5</h3>
                     </div>
                     <div class="expiry-alert">
-                        <p>Expiry alert</p>
+                        <p>Expiry soon</p>
                         <h3>2</h3>
                     </div>
                 </div>
             </div>
+                <!-- --------------------medicines--------------- -->
+             <div class ="medicine hidden">
+                    <h2>Medicine list</h2>
+                 <table>
+                     <thead>
+                         <tr>
+                             <th scope="col">med_id</th>
+                             <th scope="col">company</th>
+                            <th scope="col">medicine name</th>
+                            <th scope="col">category</th>
+                            <th scope="col">purchase price</th>
+                            <th scope="col">sell price</th>
+                            <th scope="col">Available quantity</th>
+                            <th scope="col">expiry</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >101</td>
+                            <td >bbbb</td>
+                            <td>Paracetamol</td>
+                            <td>Tablet</td>
+                            <td>100$</td>
+                            <td>105$</td>
+                            <td>100</td>
+                            <td>2</td>
+                            <td><button class="edit">edit</button><button class="delete">delete</button></td>
+                            
+                        </tr>
+                        <tr>
+                            <td >102</td>
+                            <td >aaaaa</td>
+                            <td>vitamin D</td>
+                            <td>injection</td>
+                            <td>20$</td>
+                            <td>23$</td>
+                            <td>80</td>
+                            <td>1</td>
+                            <td><button class="edit">edit</button><button class="delete">delete</button></td>
+                        </tr>
+                        <tr>
+                            <td >103</td>
+                            <td >ccccc</td>
+                            <td>vitamin C</td>
+                            <td>syrup</td>
+                            <td>30$</td>
+                            <td>40$</td>
+                            <td>40</td>
+                            <td>0</td>
+                            <td><button class="edit">edit</button><button class="delete">delete</button></td>
+                            
+                        </tr>
+                        <tr>
+                            <td>104</td>
+                            <td>ddddd</td>
+                            <td>ors</td>
+                            <td>injection</td>
+                            <td>10$</td>
+                            <td>12$</td>
+                            <td>28</td>
+                            <td>5</td>
+                            <td><button class="edit">edit</button><button class="delete">delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
 
+                <!------------------- inventory ------------------>
+            <div class="inventory hidden">
+                <div class="inventory-nav">
+                    <h2>Stock management</h2>
+                    <button class="add_med_button">+ Add medicine</button>
+                </div>
+                <div class="card1">
+                    <div onclick="show1('stock-history')"><p>Stock history</p></div>
+                    <div onclick="show1('stock-purchase')"><p>Stock purchase</p></div>
+                </div>
+                <div class="stock-history hidden">
+                    <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">med_id</th>
+                            <th scope="col">company</th>
+                            <th scope="col">medicine name</th>
+                            <th scope="col">category</th>
+                            <th scope="col">quantity</th>
+                            <th scope="col">Purchase date</th>
+                            <th scope="col">expiry date</th>
+                            <th scope="col">supplier</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >101</td>
+                            <td >Abbss</td>
+                            <td>Paracetamol</td>
+                            <td>Tablet</td>
+                            <td>300</td>
+                            <td>12-12-2026</td>
+                            <td>12-12-2028</td>
+                            <td>John Doe</td>
+                        </tr>
+                        <tr>
+                            <td >102</td>
+                            <td >jhkkj</td>
+                            <td>vitamin D</td>
+                            <td>injection</td>
+                            <td>9</td>
+                            <td>12-01-2024</td>
+                            <td>12-01-2029</td>
+                            <td>John Doe</td>
+                        </tr>
+                    </tbody>
+                </table> 
+                </div>
+                <div class="stock-purchase hidden">
+                    <div class="card2">
+                        
+                    </div>
+                </div>
+                <div class="add_medicine hidden">
+                    <form action="" method="get">
+                        <label for="med_id">Medicine ID </label>
+                        <input type="number" id="med_id" required>    
+                        <label for="med_name">Medicine Name</label>
+                        <input type="text" id="med_name" required>
+                        <div class="row">
+                            <label for="quantity">Quantity <input type="number" id="quantity" required></label>
+                            <label for="cost_price">Cost price <input type="number" id="cost_price" required></label>
+                            <label for="sell_price">Sell price <input type="number" id="sell_price" required></label>
+                            <label for="expiry_date">Expiry date <input type="date" id="expiry_date" required></label>
+                        </div> 
+                        <label for="category">Category <select id="category" required>
+                            <option value="tablet">Tablet</option>
+                                <option value="capsule">Capsule</option>
+                                <option value="granules">Granules</option>
+                                <option value="syrup">Syrup</option>
+                                <option value="solution">Solution</option>
+                                <option value="inhalers">Inhalers</option>
+                                <option value="other">Others</option>
+                                </select>
+                        </label>  
+                        <div class="row">
+                            <label for="company_name">Company Name</label>
+                            <input type="text" id="company_name" required>
+                        </div>
+                        <div>
+                            <label for="supplier_name">Supplier name</label>
+                            <input type="text" id="supplier_name">
+                        </div> 
+                        <div class="row">
+                            <label for="supplier_contact">Contact </label>  <input type="tel" id="supplier_contact">
+                            <label for="email">Email </label> <input type="email">
+                             
+                        </div> 
+                        <div class="buttons">
+
+                            <button class="cancel">Cancel</button>
+                            <button class="ok">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+                <!---------------------- Billing system-------------------------- -->
+             <div class="billing hidden">
+                <h2>Billing System</h2>
+    
+                <!-- customer details -->
+                <div class="billing-box">
+                   
+                    <div class="customer-form">
+                        <div><label>Customer name :</label><input type="text" id="cname"></div>
+                        <div><label>Phone Number :</label><input type="text" id="cphone"></div>
+                        <div><label>Billing Date :</label><input type="date" id="cdate"></div>
+                        
+                        <!-- <label>Address:</label><input type="Address" id="cadd"> -->
+                    </div>
+    
+
+                    <div class="medicine-box">
+
+                    <!-- <h3><u>Medical Details</u></h3> -->
+                        <table class="medicine-table">
+                        <tr>
+                            <th>Medicine Name</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>GST%</th>
+                            <th>Total</th>
+                            <th class="noprint">Action</th>
+                        </tr>
+
+                        <tr>
+                            <td><input type="text"></td>
+                            <td>
+                                <input type="number" class="qty">
+                            </td>
+                            <td>
+                                <input type="number" class="price">
+                            </td>
+                            <td>
+                                <input type="number" class="GST">
+                            </td>
+                            <td class="total">0</td>
+
+                            <td>
+                                <button onclick="removeRow(this)" class="remove">Remove</button>
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+                     <div class="discount-box">
+                        <label><b>Discount% : </b><input type="number" id="discountInput"></label>
+                        
+                        <button id="add">Add Item</button>
+                        <button id="calbil">calculate Bill</button>
+                    </div>
+                <!-- <div class="payment-container"> -->
+
+                    <!--pay summary-->
+                    <div class="payment-summary">
+                        <h3><u>Payment Summary</u></h3>
+
+                        <div class="row">
+                            <div>
+                                <span>Subtotal :</span>
+                                <span id="subtotal">0.00 rs.</span>
+                            </div>
+                            <div>
+                                <span>Discount :</span>
+                                <span id="Discount">0.00 rs.</span>
+                            </div>
+                            <div>
+                                <span>GST Total :</span>
+                                <span id="total">0.00 rs.</span>
+                            </div>
+                            <hr>
+                            <div class="grandtot">
+                                <span>Grand Total :</span>
+                                <span id="grandT">0.00rs</span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                    <div class="paybutton">
+                        <button id="print">Print</button>
+                        <button id="save">Save</button>
+                        <button id="clear">clear</button>
+                    </div>
+                </div>
+                
+            </div>
+
+                <!----------------------- supplier ------------------------ -->
             <div class="supplier hidden">
-                <h2>Suppliers detail</h2>
+                <div class="head">
+                    <h2>Suppliers detail</h2>
+                    <div class="button">
+                        <button class="add">+ Add supplier</button>
+                    </div>
+                </div>
+                
                 <table>
                     <thead>
                         <tr>
@@ -153,7 +361,9 @@
                             <th>Contact</th>
                             <th>Email</th>
                             <th>Address</th>
-                            <th>Pending bal</th>
+                            <th>Pincode</th>
+                            <th>Total purchase(INR)</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -163,45 +373,51 @@
                             <td>882219283</td>
                             <td>johndoe@abc.in</td>
                             <td>new york</td>
-                            <td>$15</td>
+                            <td>404555</td>
+                            <td>1500000</td>
+                            <td><button class="edit">Edit</button><button class="delete">Delete</button> </td>
 
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-<!-- inventory -->
-            <div class="inventory hidden">
-                <h2>Stocks</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th scope="col">medicine id</th>
-                            <th scope="col">medicine name</th>
-                            <th scope="col">category</th>
-                            <th scope="col">stock</th>
-                            <th scope="col">supplier</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td >101</td>
-                            <td>Paracetamol</td>
-                            <td>Tablet</td>
-                            <td>300</td>
-                            <td>John Doe</td>
-                        </tr>
-                        <tr>
-                            <td >102</td>
-                            <td>vitamin D</td>
-                            <td>injection</td>
-                            <td>9</td>
-                            <td>John Doe</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <!-- ---------------report-------------- -->
+            <div class="reports hidden">
+                <h2>Reports</h2>
+            <div class="top">
+                <div class="greenbox">
+                    <h3>TOTAL SALES</h3>
+                    <hr>
+                    <p id="sales">0 </p>
+                </div>
+                <div class="orangebox">
+                    <h3>TOTAL ORDERS</h3>
+                    <hr>
+                    <p id="order">0</p>
+                </div>
+                <div class="bluebox">
+                    <h3>LOW STOCK</h3>
+                    <hr>
+                    <p id="stock">0</p>
+                </div>
+                <div class="redbox">
+                    <h3>EXPIRED MEDICINES</h3>
+                    <hr>
+                    <p id="experied">0</p>
+                </div>
             </div>
-    
+
+
+            <!-- <div class="smallcard">
+                <h3>Top Selling Medicine</h3>
+
+            </div> -->
+
+        </div>
+<!--  -->
+
+
         </div>
     </div>
 
