@@ -199,8 +199,22 @@ background:rgba(255, 255, 255, 0.05);
     cursor: pointer;
     font-weight: 600;
 }
-.profile-card button:hover{
+.profile-card .edit-btn:hover{
     background-color:rgba(0, 0, 255, 0.842) ;
+    box-shadow: 0 4px 20px -1px rgba(0, 0, 0, 0.305), 0 2px 10px -2px rgb(0 0 0 / 0.305);
+}
+.profile-card .save-btn{
+    background: rgba(40, 167, 70, 0.842);
+    color: white;
+    border: none;
+    margin-left: 10px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.profile-card .save-btn:hover{
+    background-color:rgba(40, 167, 70, 0.848) ;
     box-shadow: 0 4px 20px -1px rgba(0, 0, 0, 0.305), 0 2px 10px -2px rgb(0 0 0 / 0.305);
 }
 .profile-card .profile-info{
@@ -237,6 +251,14 @@ background:rgba(255, 255, 255, 0.05);
     flex-direction: column;
     gap: 10px;
 }
+/* .change-img-btn{
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #233878;
+    color: white;
+    cursor: pointer;
+} */
 .profile-card .profile-right .account-information, .personal-detail{
     background-color: rgba(0, 0, 0, 0.073);
     padding: 15px 60px;
@@ -314,7 +336,7 @@ background:rgba(255, 255, 255, 0.05);
 .card div{
     /* height: 100px;
     width: 200px; */
-    background-color: white;
+    color: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -322,7 +344,24 @@ background:rgba(255, 255, 255, 0.05);
 }
 .card div p{
     margin-bottom: 10px;
-    color: #64748b;
+    font-weight: bolder;
+}
+.dashboard .card .tot-revenue{
+    background-color: #5d12a4;
+}
+.dashboard .card .today-sale{
+    /* background-color: #a49a12; */
+    background-color: #28a745;
+}
+.dashboard .card .tot-med{
+    background-color: #007bff;
+}
+.dashboard .card .low-stock{
+    /* background-color: #fd7e14; */
+    background-color: #ffc107;
+}
+.dashboard .card .expiry-alert{
+    background-color: #dc3545;
 }
 /* --------------------------------------------------------------------- */
 .supplier{
@@ -422,13 +461,25 @@ background:rgba(157, 35, 35, 0.623);
 }
 .inventory .stock-purchase{
     background-color: white;
-     margin-top: 20px;
+    margin-top: 20px;
     padding: 24px;
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     height:fit-content;
 }
-
+.inventory .card1 div:first-child{
+    background: #233878;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    color: white;
+}
+.inventory .card1 div:nth-child(2){
+   background: #16a34a;
+   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    color: white;
+}
+.inventory .card1 div.active-box{
+    color: black !important;
+}
 .inventory .add_medicine{
     width: 60%;
     background-color: rgb(184, 184, 184);
@@ -588,7 +639,7 @@ table .edit{
     border: none;
     outline: none;
 }
-.billing .billing-box .medicine-table .qty, .price, .GST, .total{
+.billing .billing-box .medicine-table .medId, .qty, .price, .GST, .total{
     width: 100px;
 }
 

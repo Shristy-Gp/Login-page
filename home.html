@@ -58,60 +58,68 @@
         <!-- -----------------------------------------------main-content------------------------------------------ -->
         <div class="main-content">
                 <!-- --------------------profile-------------- -->
-            <div class="admin-profile ">
+            <div class="admin-profile hidden">
                 <h2>My Profile</h2>
                 <div class="profile-card">
                     <div class="header">
                         <button class="edit-btn">✏️ Edit</button>
+                        <button class="save-btn hidden">💾 Save</button>
                     </div>
                     <div class="profile-info">
                         <div class="profile-left">
-                            <img src="https://via.placeholder.com/120" class="profile-img">
-                            <div><h3>User Name</h3><h3>User email.com</h3></div>
+                            <img src="https://via.placeholder.com/120" class="profile-img" id="profileImage">
+                            <!-- <input type="file" id="imageUpload" accept="image/*" hidden>
+                            <button type="button" class="change-img-btn hidden">Change Photo</button> -->
+                            <div><h3 id="profile-name">User Name</h3><h3 id="profile-email">User email.com</h3></div>
                         </div>      
                         <div class="profile-right">
                             <div class="account-information">
                                 <h3>Account Information</h3>
-                                <div class="one"><div class="aa"><b>Username :</b></div><span id="acc-user-name"></span></div>
-                                <div class="one"><div class="aa"><b>Email :</b></div><span id="acc-user-email"></span></div>
-                                <div class="one"><div class="aa"><b>Phone :</b></div><span id="acc-user-ph"></span></div>
+                                <div class="one"><div class="aa"><b>Username :</b></div><input type="text" id="acc-user-name" disabled></div>
+                                <div class="one"><div class="aa"><b>Email :</b></div><input type="email" id="acc-user-email" disabled></div>
+                                <div class="one"><div class="aa"><b>Phone :</b></div><input type="number" id="acc-user-ph" disabled></div>
                             </div>
                             <div class="personal-detail">
                                 <h3>Personal Details</h3>
-                                <div class="one"><div class="aa"><b>Full Name :</b></div><span id="acc-user-fullname"></span></div>
-                                <div class="one"><div class="aa"><b>Date of Birth :</b></div><span id="acc-user-dob"></span></div>
-                                <div class="one"><div class="aa"><b>Gender :</b></div><span id="acc-user-gender"></span></div>
-                                <div class="one"><div class="aa"><b>Location :</b></div><span id="acc-user-loc"></span></div>
-                                <div class="one"><div class="aa"><b>City :</b></div><span id="acc-user-city"></span></div>
-                                <div class="one"><div class="aa"><b>State :</b></div><span id="acc-user-state"></span></div>
-                                <div class="one"><div class="aa"><b>Pincode :</b></div><span id="acc-user-pin"></span></div>
+                                <div class="one"><div class="aa"><b>Full Name :</b></div><input type="text" id="acc-user-fullname" disabled></div>
+                                <div class="one"><div class="aa"><b>Date of Birth :</b></div><input type="date" id="acc-user-dob" disabled></div>
+                                <div class="one"><div class="aa"><b>Gender :</b></div><input type="text" id="acc-user-gender" disabled></div>
+                                <div class="one"><div class="aa"><b>Location :</b></div><input type="text" id="acc-user-loc" disabled></div>
+                                <div class="one"><div class="aa"><b>City :</b></div><input type="text" id="acc-user-city" disabled></div>
+                                <div class="one"><div class="aa"><b>State :</b></div><input type="text" id="acc-user-state" disabled></div>
+                                <div class="one"><div class="aa"><b>Pincode :</b></div><input type="number" id="acc-user-pin" disabled></div>
                             </div>
                         </div>  
                     </div>
                 </div>
             </div>
 <!------------------------ dashboard -------------------->
-            <div class="dashboard hidden">
+            <div class="dashboard ">
                 <h2>Dashboard</h2>
                 <div class="card">
                     <div class="tot-revenue">
                         <p>Total Revenue</p>
+                        <hr>
                         <h3>INR 5600</h3>
                     </div>
                     <div class="today-sale">
                         <p>Today's Sale</p>
+                        <hr>
                         <h3>INR 100</h3>
                     </div>
                     <div class="tot-med">
                         <p>Total medicines</p>
+                        <hr>
                         <h3>500</h3>
                     </div>
                     <div class="low-stock">
                         <p>Stock alert</p>
+                        <hr>
                         <h3>5</h3>
                     </div>
                     <div class="expiry-alert">
                         <p>Expiry soon</p>
+                        <hr>
                         <h3>2</h3>
                     </div>
                 </div>
@@ -129,7 +137,7 @@
                             <th scope="col">purchase price</th>
                             <th scope="col">sell price</th>
                             <th scope="col">Available quantity</th>
-                            <th scope="col">expiry</th>
+                            <th scope="col">expiry status</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -142,7 +150,7 @@
                             <td>100$</td>
                             <td>105$</td>
                             <td>100</td>
-                            <td>2</td>
+                            <td>soon</td>
                             <td><button class="edit">edit</button><button class="delete">delete</button></td>
                         </tr>
                         <tr>
@@ -153,7 +161,7 @@
                             <td>20$</td>
                             <td>23$</td>
                             <td>80</td>
-                            <td>1</td>
+                            <td>safe</td>
                             <td><button class="edit">edit</button><button class="delete">delete</button></td>
                         </tr>
                         <tr>
@@ -164,7 +172,7 @@
                             <td>30$</td>
                             <td>40$</td>
                             <td>40</td>
-                            <td>0</td>
+                            <td>expired</td>
                             <td><button class="edit">edit</button><button class="delete">delete</button></td>
                             
                         </tr>
@@ -176,7 +184,7 @@
                             <td>10$</td>
                             <td>12$</td>
                             <td>28</td>
-                            <td>5</td>
+                            <td>soon</td>
                             <td><button class="edit">edit</button><button class="delete">delete</button></td>
                         </tr>
                     </tbody>
@@ -233,7 +241,9 @@
                     </table> 
                 </div>
                 <div class="stock-purchase hidden">
-                    <div class="card2"></div>
+                    <div class="card2">
+                       
+                    </div>
                 </div>
                 <div class="add_medicine hidden">
                     <form action="" method="get">
@@ -270,8 +280,8 @@
                             <label for="email">Email </label> <input type="email">
                         </div> 
                         <div class="buttons">
-                            <button class="cancel">Cancel</button>
-                            <button class="ok">OK</button>
+                            <button type="button" class="cancel">Cancel</button>
+                            <button type="submit" class="ok">OK</button>
                         </div>
                     </form>
                 </div>
@@ -288,6 +298,7 @@
                     <div class="medicine-box">
                         <table class="medicine-table">
                             <tr>
+                                <th>Med_ID</th>
                                 <th>Medicine Name</th>
                                 <th>Qty</th>
                                 <th>Price</th>
@@ -296,6 +307,7 @@
                                 <th class="noprint">Action</th>
                             </tr>
                             <tr>
+                                <td><input type="text" class="medId"></td>
                                 <td><input type="text"></td>
                                 <td><input type="number" class="qty"></td>
                                 <td><input type="number" class="price"></td>

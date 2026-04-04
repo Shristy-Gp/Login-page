@@ -12,6 +12,7 @@ function show(Class){
     
     
 }
+
 // function show(section){
 //     document.querySelectorAll(".section").forEach(el=>{
 //         el.classList.add("hidden");
@@ -20,13 +21,8 @@ function show(Class){
 //     document.querySelector("." + section).classList.remove("hidden");
 // }
 
-/* stock history and stock purchase  */
-function show1(section){
-    document.querySelector(".stock-history").classList.add("hidden");
-    document.querySelector(".stock-purchase").classList.add("hidden");
-    document.querySelector("." + section).classList.remove("hidden");
-}
 
+ 
 
 /* sidebar module active style */
 document.querySelectorAll(".sidebar div").forEach(btn=>{
@@ -41,6 +37,214 @@ document.querySelectorAll(".sidebar div").forEach(btn=>{
     });
 });
 
+/* profile */
+// Load Profile from localStorage
+window.addEventListener("DOMContentLoaded", () => {
+
+    let data = JSON.parse(localStorage.getItem("profile"));
+
+    if (!data) {
+        // default data
+        data = {
+            username: "Mr. Abcdef",
+            email: "abcdef@email.com",
+            phone: "9998886665",
+            fullname: "abcdef ghij",
+            dob: "",
+            gender: "male",
+            location: "patna",
+            city: "patna",
+            state: "bihar",
+            pin: "801503"
+        };
+    }
+
+    // Fill fields
+    document.getElementById("acc-user-name").value = data.username;
+    document.getElementById("acc-user-email").value = data.email;
+    document.getElementById("acc-user-ph").value = data.phone;
+    document.getElementById("acc-user-fullname").value = data.fullname;
+    document.getElementById("acc-user-dob").value = data.dob;
+    document.getElementById("acc-user-gender").value = data.gender;
+    document.getElementById("acc-user-loc").value = data.location;
+    document.getElementById("acc-user-city").value = data.city;
+    document.getElementById("acc-user-state").value = data.state;
+    document.getElementById("acc-user-pin").value = data.pin;
+
+});
+document.querySelector(".edit-btn").addEventListener("click", () => {
+
+    document.querySelectorAll(".profile-right input").forEach(input => {
+        input.disabled = false;
+    });
+
+    document.querySelector(".save-btn").classList.remove("hidden");
+});
+document.querySelector(".save-btn").addEventListener("click", () => {
+
+    let data = {
+        username: document.getElementById("acc-user-name").value,
+        email: document.getElementById("acc-user-email").value,
+        phone: document.getElementById("acc-user-ph").value,
+        fullname: document.getElementById("acc-user-fullname").value,
+        dob: document.getElementById("acc-user-dob").value,
+        gender: document.getElementById("acc-user-gender").value,
+        location: document.getElementById("acc-user-loc").value,
+        city: document.getElementById("acc-user-city").value,
+        state: document.getElementById("acc-user-state").value,
+        pin: document.getElementById("acc-user-pin").value
+    };
+
+    // Save to localStorage
+    localStorage.setItem("profile", JSON.stringify(data));
+
+    // Disable again
+    document.querySelectorAll(".profile-right input").forEach(input => {
+        input.disabled = true;
+    });
+
+    document.querySelector(".save-btn").classList.add("hidden");
+
+    function updateTopProfile(data) {
+   // Navbar
+    document.querySelector(".user-name").textContent = data.username;
+    document.querySelector(".user-email").textContent = data.email;
+    // Profile section (below image)
+    document.getElementById("profile-name").textContent = data.username;
+    document.getElementById("profile-email").textContent = data.email;
+    // Image (if exists)
+    if (data.image) {
+        document.getElementById("profileImage").src = data.image;
+
+        let navImg = document.getElementById("navProfileImg");
+        if (navImg) navImg.src = data.image;
+    }
+}
+    updateTopProfile(data);
+
+    alert("Profile Updated Successfully!");
+});
+
+/* inventory ======================================================================================*/
+//  stock history and stock purchase  
+function show1(section){
+    document.querySelector(".stock-history").classList.add("hidden");
+    document.querySelector(".stock-purchase").classList.add("hidden");
+    document.querySelector("." + section).classList.remove("hidden");
+
+    document.querySelectorAll(".inventory .card1 div").forEach(el=>{
+        el.classList.remove("active-box");
+    });
+
+    // add active to clicked
+    event.currentTarget.classList.add("active-box");
+}
+// Show Add Medicine Form
+document.querySelector(".add_med_button").addEventListener("click", () => {
+    document.querySelector(".add_medicine").classList.remove("hidden");
+});
+// Cancel form with confirmation
+document.querySelector(".cancel").addEventListener("click", () => {
+    let confirmCancel = confirm("Do you want to cancel?");
+
+    if (confirmCancel) {
+        document.querySelector(".add_medicine").classList.add("hidden");
+    }
+});
+// Handle Add Medicine Form Submit
+document.querySelector(".add_medicine form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    // Get values
+    let medId = document.getElementById("med_id").value;
+    let medName = document.getElementById("med_name").value;
+    let qty = document.getElementById("quantity").value;
+    let cost = document.getElementById("cost_price").value;
+    let sell = document.getElementById("sell_price").value;
+    let expiry = document.getElementById("expiry_date").value;
+    let category = document.getElementById("category").value;
+    let company = document.getElementById("company_name").value;
+    let supplier = document.getElementById("supplier_name").value;
+
+        // Calculate expiry status
+    let today = new Date();
+    let expDate = new Date(expiry);
+
+    // Difference in days
+    let diffTime = expDate - today;
+    let diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+    let expiryStatus;
+
+    // Logic:
+    // expired → 0 days or less
+    // expiring soon → within 30 days
+    if (diffDays <= 0) {
+        expiryStatus = "Expired";
+    } else if (diffDays <= 30) {
+        expiryStatus = "Soon";
+    } else {
+        expiryStatus = "Safe";
+    }
+    
+
+    // ===============================
+    // 1. Add to Medicine Table
+    // ===============================
+    let medTable = document.querySelector(".medicine table tbody");
+
+    let newRow1 = medTable.insertRow();
+    let color = diffDays <= 0 ? "red" : diffDays <= 30 ? "orange" : "green";
+   
+
+    newRow1.innerHTML = `
+        <td>${medId}</td>
+        <td>${company}</td>
+        <td>${medName}</td>
+        <td>${category}</td>
+        <td>${cost}</td>
+        <td>${sell}</td>
+        <td>${qty}</td>
+         <td style="color:${color}; font-weight:bold;">${expiryStatus}</td>
+        <td>
+            <button class="edit">edit</button>
+            <button class="delete">delete</button>
+        </td>
+    `;
+
+    // ===============================
+    // 2. Add to Stock History Table
+    // ===============================
+    let stockTable = document.querySelector(".stock-history table tbody");
+
+    today = new Date().toISOString().split("T")[0];
+
+    let newRow2 = stockTable.insertRow();
+
+    newRow2.innerHTML = `
+        <td>${medId}</td>
+        <td>${company}</td>
+        <td>${medName}</td>
+        <td>${category}</td>
+        <td>${qty}</td>
+        <td>${today}</td>
+        <td>${expiry}</td>
+        <td>${supplier || "N/A"}</td>
+    `;
+
+    // ===============================
+    // Reset Form + Hide
+    // ===============================
+    this.reset();
+    document.querySelector(".add_medicine").classList.add("hidden");
+
+    alert("Medicine Added Successfully!");
+    if (!medId || !medName || !qty) {
+    alert("Please fill all required fields!");
+    return;
+}
+});
+
 
 // let curr = "off";
 // let elem = document.querySelector(".add_med_button");
@@ -53,7 +257,7 @@ document.querySelectorAll(".sidebar div").forEach(btn=>{
 //     }
 // } );
 
-/* billing and report */
+/* billing and report =================================================================================== */
     document.getElementById("add").addEventListener("click", addItem);
     function addItem() {
     let table = document.querySelector(".medicine-table");
@@ -152,8 +356,37 @@ document.getElementById("print").addEventListener("click", function () {
 
 // save bill-----------------------------------------------------------------------------------
     
-document.getElementById("save").addEventListener("click", saveBill);
+document.getElementById("save").addEventListener("click", function(){
+    updateStock();
+    saveBill();
+});
 
+function updateStock() {
+    let billingRows = document.querySelectorAll(".medicine-table tr");
+    let medTableRows = document.querySelectorAll(".medicine table tbody tr");
+    billingRows.forEach((row, index) => {
+        if (index === 0) return; // skip header
+        let medName = row.cells[0].querySelector("input")?.value;
+        let qtySold = parseInt(row.cells[1].querySelector("input")?.value) || 0;
+        if (!medName || qtySold <= 0) return;
+
+        // Find matching medicine in medicine table
+        medTableRows.forEach(medRow => {
+            let tableMedName = medRow.cells[2].innerText;
+            if (tableMedName.toLowerCase() === medName.toLowerCase()) {
+                let currentQty = parseInt(medRow.cells[6].innerText) || 0;
+                if (currentQty >= qtySold) {
+                    let newQty = currentQty - qtySold;
+                    medRow.cells[6].innerText = newQty;
+
+                } else {
+                    alert(`Not enough stock for ${medName}`);
+                }
+            }
+        });
+
+    });
+}
 function saveBill() {
 
     //  Customer Details
@@ -167,15 +400,16 @@ function saveBill() {
 
     for (let i = 1; i < table.rows.length; i++) {
         let row = table.rows[i];
-
-        let name = row.cells[0].children[0].value;
-        let qty = row.cells[1].children[0].value;
-        let price = row.cells[2].children[0].value;
-        let gst = row.cells[3].children[0].value;
-        let total = row.cells[4].innerText;
+        let id = row.cells[0].children[0].value;
+        let name = row.cells[1].children[0].value;
+        let qty = row.cells[2].children[0].value;
+        let price = row.cells[3].children[0].value;
+        let gst = row.cells[4].children[0].value;
+        let total = row.cells[5].innerText;
 
         if (name !== "") {
             items.push({
+                medicineId: id,
                 medicine: name,
                 quantity: qty,
                 price: price,
@@ -241,7 +475,8 @@ function clearBill() {
     firstRow.cells[1].children[0].value = "";
     firstRow.cells[2].children[0].value = "";
     firstRow.cells[3].children[0].value = "";
-    firstRow.cells[4].innerText = "0";
+    firstRow.cells[4].children[0].value = "";
+    firstRow.cells[5].innerText = "0";
 
     //  Payment summary reset
     document.getElementById("subtotal").innerText = "0.00 rs.";
