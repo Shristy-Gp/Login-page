@@ -100,27 +100,27 @@
                     <div class="tot-revenue">
                         <p>Total Revenue</p>
                         <hr>
-                        <h3>INR 5600</h3>
+                        <h3>INR 0</h3>
                     </div>
                     <div class="today-sale">
                         <p>Today's Sale</p>
                         <hr>
-                        <h3>INR 100</h3>
+                        <h3>INR 0</h3>
                     </div>
                     <div class="tot-med">
                         <p>Total medicines</p>
                         <hr>
-                        <h3>500</h3>
+                        <h3>0</h3>
                     </div>
                     <div class="low-stock">
                         <p>Stock alert</p>
                         <hr>
-                        <h3>5</h3>
+                        <h3>0</h3>
                     </div>
                     <div class="expiry-alert">
                         <p>Expiry soon</p>
                         <hr>
-                        <h3>2</h3>
+                        <h3>0</h3>
                     </div>
                 </div>
             </div>
@@ -147,48 +147,15 @@
                             <td >bbbb</td>
                             <td>Paracetamol</td>
                             <td>Tablet</td>
-                            <td>100$</td>
-                            <td>105$</td>
                             <td>100</td>
-                            <td>soon</td>
-                            <td><button class="edit">edit</button><button class="delete">delete</button></td>
-                        </tr>
-                        <tr>
-                            <td >102</td>
-                            <td >aaaaa</td>
-                            <td>vitamin D</td>
-                            <td>injection</td>
-                            <td>20$</td>
-                            <td>23$</td>
-                            <td>80</td>
-                            <td>safe</td>
-                            <td><button class="edit">edit</button><button class="delete">delete</button></td>
-                        </tr>
-                        <tr>
-                            <td >103</td>
-                            <td >ccccc</td>
-                            <td>vitamin C</td>
-                            <td>syrup</td>
-                            <td>30$</td>
-                            <td>40$</td>
-                            <td>40</td>
-                            <td>expired</td>
-                            <td><button class="edit">edit</button><button class="delete">delete</button></td>
-                            
-                        </tr>
-                        <tr>
-                            <td>104</td>
-                            <td>ddddd</td>
-                            <td>ors</td>
-                            <td>injection</td>
-                            <td>10$</td>
-                            <td>12$</td>
-                            <td>28</td>
+                            <td>105</td>
+                            <td>5</td>
                             <td>soon</td>
                             <td><button class="edit">edit</button><button class="delete">delete</button></td>
                         </tr>
                     </tbody>
                 </table>
+                
             </div>
             
 
@@ -199,10 +166,10 @@
                     <button class="add_med_button">+ Add medicine</button>
                 </div>
                 <div class="card1">
-                    <div onclick="show1('stock-history')"><p>Stock history</p></div>
-                    <div onclick="show1('stock-purchase')"><p>Stock purchase</p></div>
+                    <div onclick="openSection('history')"><p>Stock history</p></div>
+                    <div onclick="openSection('purchase')"><p>Stock purchase</p></div>
                 </div>
-                <div class="stock-history hidden">
+                <div class="stock-history hidden" id="stockHistoryBox">
                     <table>
                         <thead>
                             <tr>
@@ -240,45 +207,116 @@
                         </tbody>
                     </table> 
                 </div>
-                <div class="stock-purchase hidden">
-                    <div class="card2">
-                       
+                <div class="stock-purchase hidden" id="stockPurchaseBox">
+                    <h2>Stock Purchase</h2>
+
+                    <!-- Supplier Section -->
+                    <div class="supplier-form">
+                        <div>
+                            <label>Supplier ID</label><br>
+                            <select id="supplierId" onchange="fillSupplierName()"></select>
+                        </div>
+
+                        <div>
+                            <label>Supplier Name</label><br>
+                            <input type="text" id="supplierName" readonly>
+                        </div>
                     </div>
+
+                    <!-- Medicine Table -->
+                    <table id="purchaseTable">
+                        <thead>
+                            <tr>
+                                <th>Med ID</th>
+                                <th>Name</th>
+                                <th>Company</th>
+                                <th>Category</th>
+                                <th>expiry</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="purchaseBody"></tbody>
+                    </table>
+                    <div style="margin:10px 0;">
+                        <label><b>GST % :</b></label>
+                        <input type="number" id="gstGlobal" placeholder="Enter GST %" style="width:120px;">
+                    </div>
+
+                    <button id="addRowPurchase">+ Add Row</button>
+
+                    <!-- Payment Summary -->
+                    <div class="payment-summary">
+                        <h3>Payment Summary</h3>
+
+                        <div class="row">
+                            <div><span>Subtotal :</span><span id="subTotal">0.00 rs.</span></div>
+                            <div><span>GST amt :</span><span id="gstTotal">0.00 rs.</span></div>
+                            <hr>
+                            <div class="grandtot"><span>Grand Total :</span><span id="grandTotal">0.00 rs.</span></div>
+                        </div>
+                    </div>
+
+                    <div class="paybutton">
+                        <button id="savePurchase">Save</button>
+                        <button id="clearPurchase">Clear</button>
+                        <button id="payPurchase">Pay Now</button>
+                    </div>
+                                    
                 </div>
                 <div class="add_medicine hidden">
-                    <form action="" method="get">
-                        <label for="med_id">Medicine ID </label>
-                        <input type="number" id="med_id" required>    
-                        <label for="med_name">Medicine Name</label>
-                        <input type="text" id="med_name" required>
-                        <div class="row">
-                            <label for="quantity">Quantity <input type="number" id="quantity" required></label>
-                            <label for="cost_price">Cost price <input type="number" id="cost_price" required></label>
-                            <label for="sell_price">Sell price <input type="number" id="sell_price" required></label>
-                            <label for="expiry_date">Expiry date <input type="date" id="expiry_date" required></label>
-                        </div> 
-                        <label for="category">Category <select id="category" required>
-                            <option value="tablet">Tablet</option>
-                            <option value="capsule">Capsule</option>
-                            <option value="granules">Granules</option>
-                            <option value="syrup">Syrup</option>
-                            <option value="solution">Solution</option>
-                            <option value="inhalers">Inhalers</option>
-                            <option value="other">Others</option>
-                            </select>
-                        </label>  
-                        <div class="row">
-                            <label for="company_name">Company Name</label>
-                            <input type="text" id="company_name" required>
+                    <h3>Enter Medicine Details</h3>
+                    <form action="" method="post">
+                        <div class="rows">
+                            <div class="field">
+                                <label for="med_id">Medicine ID </label>
+                                <input type="number" name="med_id" id="med_id" required>    
+                            </div>
+                            <div class="field">
+                                <label for="med_name">Medicine Name</label>
+                                <input type="text" id="med_name" required>   
+                            </div>
                         </div>
-                        <div>
-                            <label for="supplier_name">Supplier name</label>
-                            <input type="text" id="supplier_name">
+                        <div class="rows">
+                            <div class="field">
+                                <label for="company_name">Company Name</label>
+                                <input type="text" id="company_name" required>
+                            </div>
+                            <div class="field">
+                                <label for="category">Category</label>  
+                                <select id="category" required>
+                                    <option value="tablet">Tablet</option>
+                                    <option value="capsule">Capsule</option>
+                                    <option value="granules">Granules</option>
+                                    <option value="syrup">Syrup</option>
+                                    <option value="solution">Solution</option>
+                                    <option value="inhalers">Inhalers</option>
+                                    <option value="other">Others</option>
+                                </select>
+                            </div>
                         </div> 
-                        <div class="row">
-                            <label for="supplier_contact">Contact </label>  <input type="tel" id="supplier_contact">
-                            <label for="email">Email </label> <input type="email">
+                        <div class="rows">
+                            <div class="field">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" id="quantity" required>
+                            </div>
+                            <div class="field">
+                                <label for="expiry_date">Expiry date</label>
+                                <input type="date" id="expiry_date" required>
+                            </div>   
                         </div> 
+                        <div class="rows">
+                            <div class="field">
+                                <label for="cost_price">Cost rate</label>
+                                <input type="number" id="cost_price" required>
+                            </div>
+                            <div class="field">
+                                <label for="sell_price">Sell rate</label>
+                                <input type="number" id="sell_price" required>
+                            </div>
+                        </div>                                                    
                         <div class="buttons">
                             <button type="button" class="cancel">Cancel</button>
                             <button type="submit" class="ok">OK</button>
@@ -307,8 +345,8 @@
                                 <th class="noprint">Action</th>
                             </tr>
                             <tr>
-                                <td><input type="text" class="medId"></td>
-                                <td><input type="text"></td>
+                                <td><select class="medId" onchange="fillSupplierName()"></select></td>
+                                <td><input id="medname" type="text"></td>
                                 <td><input type="number" class="qty"></td>
                                 <td><input type="number" class="price"></td>
                                 <td><input type="number" class="GST"></td>
@@ -317,13 +355,13 @@
                             </tr>
                         </table>
                     </div>
-                     <div class="discount-box">
+                    <div class="discount-box">
                         <label><b>Discount% : </b><input type="number" id="discountInput"></label>
                         <button id="add">Add Item</button>
                         <button id="calbil">calculate Bill</button>
                     </div>
                     <div class="payment-summary">
-                        <h3><u>Payment Summary</u></h3>
+                        <h3>Payment Summary</h3>
                         <div class="row">
                             <div>
                                 <span>Subtotal :</span> <span id="subtotal">0.00 rs.</span>
@@ -351,7 +389,7 @@
             <div class="supplier hidden">
                 <div class="head">
                     <h2>Suppliers detail</h2>
-                    <div class="button"><button class="add">+ Add supplier</button></div>
+                    <div class="button"><button class="add-supplier-btn">+ Add supplier</button></div>
                 </div>               
                 <table>
                     <thead>
@@ -362,7 +400,6 @@
                             <th>Email</th>
                             <th>Address</th>
                             <th>Pincode</th>
-                            <th>Total purchase(INR)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -373,18 +410,58 @@
                             <td>882219283</td>
                             <td>johndoe@abc.in</td>
                             <td>new york</td>
-                            <td>404555</td>
-                            <td>1500000</td>
+                            <td>404555</td>                            
                             <td><button class="edit">Edit</button><button class="delete">Delete</button> </td>
 
                         </tr>
                     </tbody>
                 </table>
+                <div class="add-supplier-form hidden">
+                    <h3>Enter Supplier Information</h3>
+                    <form action="" method="post">
+
+                        <div class="rows">
+                            <div class="field">
+                                <label for="supplier-id">Id</label>
+                                <input type="number" id="supplier-id" placeholder="Enter medicine id.." required>
+                            </div>
+                            <div class="field">
+                                <label for="supplier-name">Supplier</label>
+                                <input type="text" id="supplier-name" placeholder="Enter name here.." required>
+                            </div>                            
+                        </div>
+                        <div class="rows">
+                            <div class="field">
+                                <label for="s-Contact">Contact</label>
+                                <input type="tel" id="s-contact" placeholder="e.g. 1112223334" required>
+                            </div>
+                            <div class="field">
+                                <label for="s-email">Email</label>
+                                <input type="email" id="s-email" placeholder="e.g. abc@def.com">
+                            </div>                        
+                        </div>
+                    <div class="rows">
+                        <div class="field">
+                            <label for="s-pincode">Pincode</label>
+                            <input type="number" id="s-pincode" placeholder="------" required>
+                        </div>
+                        <div class="field">
+                            <label for="s-address">Address</label>
+                            <input type="text" id="s-address" placeholder="Are they live in your city?" required>    
+                        </div>                        
+                    </div>
+                    <div class="buttons">
+                            <button type="button" class="s-cancel">Cancel</button>
+                            <button type="submit" class="s-ok">OK</button>
+                    </div>
+                    </form>
+
+                </div>
             </div>
                 <!-- ---------------report-------------- -->
-            <div class="reports hidden">
-                <h2>Reports</h2>
-                <div class="top">
+                <div class="reports hidden">
+                    <h2>Reports</h2>
+                    <div class="top">
                     <div class="greenbox">
                         <h3>TOTAL SALES</h3>
                         <hr>
@@ -407,11 +484,51 @@
                     </div>
                 </div>
                 <!-- <div class="smallcard">
-                                <h3>Top Selling Medicine</h3>
-
-                            </div> -->
+                    <h3>Top Selling Medicine</h3>
+                    
+                </div> -->
             </div>
-<!-- -----------*****************----------------- -->
+            <!-- ---------------setting-------------- -->
+            <div class="setting hidden">
+                <h2>Settings</h2>
+                <div class="settings-card">
+                    <div class="section1">
+                        <div class="setting-section">
+                            <h3>Profile Photo</h3>
+                            <input type="file" onchange="uploadPhoto(event)">
+                            <button onclick="updatePhoto()">Update Photo</button>
+                            <button onclick="removePhoto()">Remove Photo</button>         
+                        </div>
+                        <div>
+                             <div class="setting-section">
+                                <h3>App Settings</h3>  
+                                <div class="chkbx">
+                                    <label><input type="checkbox">Dark mode</label>
+                                    <label><input type="checkbox">Notifications</label> 
+                                </div>  
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="section1">
+                        <div class="setting-section">
+                            <h3>Password & Security</h3>
+                            <input type="password" id="old-pass" placeholder="Old Password">
+                            <input type="password" id="new-pass" placeholder="New Password">
+                            <input type="password" id="confirm-pass" placeholder="Confirm Password">
+                            <div class="show-pass">
+                                <input type="checkbox" id="showPass" onclick="togglePassword()">
+                                <label for="showPass">Show Password</label>
+                            </div>
+                        </div>
+                        <div class="save-and-log">
+                            <button class="save-changes" onclick="saveSettings()">Save Changes</button>
+                            <button class="logout" onclick="logout()">Logout</button>
+                        </div>
+                    </div>
+
+                </div>    
+            <!-- -----------*****************----------------- -->
         </div>
     </div>
 
