@@ -7,12 +7,9 @@ function show(Class){
     document.querySelector(".billing").classList.add("hidden");
     document.querySelector(".supplier").classList.add("hidden");
     document.querySelector(".reports").classList.add("hidden");
-    // document.querySelector(".setting").classList.add("hidden");
-    document.querySelector("." + Class).classList.remove("hidden");
-    
-    
+    document.querySelector(".setting").classList.add("hidden");
+    document.querySelector("." + Class).classList.remove("hidden");    
 }
-
 /* sidebar module active style */
 document.querySelectorAll(".sidebar div").forEach(btn=>{
     btn.addEventListener("click", function(){
@@ -22,7 +19,67 @@ document.querySelectorAll(".sidebar div").forEach(btn=>{
         this.classList.add("active");
     });
 });
+function getExpiryStatus(expiry) {  /* Logic:   expired → 0 days or less   expiring soon → within 30 days*/ 
+    let today = new Date();
+    let expDate = new Date(expiry);
 
+    let diffDays = (expDate - today) / (1000 * 60 * 60 * 24);
+
+    if (diffDays <= 0) return "Expired";
+    else if (diffDays <= 30) return "Soon";
+    else return "Safe";
+}
+function applyExpiryColor(cell) {
+    let status = cell.textContent.trim();
+
+    if (status === "Expired") {
+        cell.style.color = "red";
+    } 
+    else if (status === "Soon") {
+        cell.style.color = "orange";
+    } 
+    else {
+        cell.style.color = "green";
+    }
+}
+function applyStockStyle(row, qty) {
+    let qtyCell = row.cells[6];
+    if (qty <= 20) {
+        qtyCell.style.color = "red";
+    } 
+    else if (qty <= 50) {
+        qtyCell.style.color = "orange";
+    } 
+    else {
+        qtyCell.style.color = "green";
+
+    }
+}
+let deleteRowRef = null;   /* global variable use for deletion*/
+function deleteMedicine(btn) {
+    deleteRowRef = btn.parentNode.parentNode;
+
+    document.getElementById("confirmMsg").innerText = "Delete this medicine?";
+    document.getElementById("confirmBox").style.display = "block";
+}
+function confirmYes() {
+    if (deleteRowRef) {
+        deleteRowRef.remove();
+        updateMedDropdown(); // ✅ update billing dropdown
+        loadMed();
+    }
+    document.getElementById("confirmBox").style.display = "none";
+}
+function confirmNo() {
+    deleteRowRef = null;
+    document.getElementById("confirmBox").style.display = "none";
+}
+
+function refreshSystem() {
+    updateDashboardStock();
+    loadMed();
+    applyStockStatus();
+}
 /* profile============================================================================================= */
 // Load Profile from localStorage
 window.addEventListener("DOMContentLoaded", () => {
@@ -108,33 +165,156 @@ document.querySelector(".save-btn").addEventListener("click", () => {
 });
 
 /* dashboard ======================================================================================*/
-
+function showLowStock() {
+    let box = document.getElementById("stockListBox");
+    // ✅ TOGGLE
+    if (box.style.display === "block") {
+        box.style.display = "none";
+        return;
+    }
+    let medRows = document.querySelectorAll(".medicine tbody tr");
+    let stockList = document.getElementById("stockList");
+    stockList.innerHTML = ""; // clear old data
+    medRows.forEach(row => {
+        let medId = row.cells[0].textContent.trim();
+        let medName = row.cells[2].textContent.trim();
+        let qty = parseInt(row.cells[6].textContent) || 0;
+        if (qty <= 50) {
+            let tr = document.createElement("tr");
+            let color = (qty <= 20) ? "red" : "orange";
+            tr.innerHTML = `
+                <td>${medId}</td>
+                <td>${medName}</td>
+                <td style="color:${color}; font-weight:800;">${qty}</td>
+            `;
+            stockList.appendChild(tr);
+        }
+    });
+    box.style.display = "block";
+}
+// updateDashboardStock(); call at very bottom 
+function updateDashboardStock() {
+    let medRows = document.querySelectorAll(".medicine tbody tr");
+    let count = 0;
+    medRows.forEach(row => {
+        let qty = parseInt(row.cells[6].textContent) || 0;
+        if (qty <= 50) count++;
+    });
+    document.querySelector(".low-stock h3").textContent = count;
+}
 /* medicine======================================================================== */
+function applyStockStatus() {
+    let medRows = document.querySelectorAll(".medicine tbody tr");
+    medRows.forEach(row => {
+        let qty = parseInt(row.cells[6].textContent) || 0;
+        // let statusCell = row.cells[7];
+        if (qty <= 20) {
+            // statusCell.textContent = "Expired";
+            // statusCell.style.color = "red";
+            row.cells[6].style.color = "red";   // qty column color
+        } 
+        else if (qty <= 50) {
+            // statusCell.textContent = "Soon";
+            // statusCell.style.color = "orange";
+            row.cells[6].style.color = "orange"; // qty column color
+        } 
+        else {
+            // statusCell.textContent = "Safe";
+            // statusCell.style.color = "green";
+            row.cells[6].style.color = "green";
+        }
+    });
+}
+// edit button
+function editMedicine(btn) {
+    let row = btn.parentNode.parentNode;
+    let sellCell = row.cells[5];
 
+    let currentValue = sellCell.textContent;
 
+    // replace with input
+    sellCell.innerHTML = `<input type="number" value="${currentValue}" style="width:80px;">`;
 
+    btn.textContent = "Save";
+    btn.onclick = function () {
+        let newValue = sellCell.children[0].value;
+
+        sellCell.textContent = newValue;
+
+        updateMedDropdown(); // optional refresh
+        loadMed();
+
+        btn.textContent = "Edit";
+        btn.onclick = function () {
+            editMedicine(btn);
+        };
+    };
+}
+
+// when delete clicked
+function updateMedDropdown() {
+    let selects = document.querySelectorAll(".medId");
+
+    selects.forEach(select => {
+        select.innerHTML = "<option value=''>Select</option>";
+
+        let medRows = document.querySelectorAll(".medicine tbody tr");
+
+        medRows.forEach(row => {
+            let id = row.cells[0].textContent.trim();
+
+            let opt = document.createElement("option");
+            opt.value = id;
+            opt.textContent = id;
+
+            select.appendChild(opt);
+        });
+    });
+}
+
+document.querySelector(".medicine table tbody").addEventListener("click", function(e) {
+
+    // DELETE BUTTON
+    if (e.target.classList.contains("delete")) {
+        let confirmDelete = confirm("Do you want to delete this medicine?");
+        if (confirmDelete) {
+            e.target.closest("tr").remove();
+            refreshSystem();
+        }
+    }
+
+    // EDIT BUTTON
+    if (e.target.classList.contains("edit")) {
+        let row = e.target.closest("tr");
+
+        let sellPriceCell = row.cells[5]; // sell price column
+        let oldValue = sellPriceCell.textContent;
+
+        let newPrice = prompt("Edit Sell Price:", oldValue);
+
+        if (newPrice !== null && newPrice !== "") {
+            sellPriceCell.textContent = newPrice;
+            refreshSystem();
+            applyExpiryColor(row.cells[7]);
+        }
+    }
+});
 /* inventory ======================================================================================*/
 function openSection(section){
-
     let history = document.getElementById("stockHistoryBox");
     let purchase = document.getElementById("stockPurchaseBox");
-
     // -------- HISTORY CLICK ----------
     if(section === "history"){
-
         // if purchase is open → confirm
         if(!purchase.classList.contains("hidden")){
             let confirmSwitch = confirm("⚠️ Purchase is in progress. Switch anyway?");
             if(!confirmSwitch) return;
         }
-
         purchase.classList.add("hidden");
         history.classList.remove("hidden");
     }
-
     // -------- PURCHASE CLICK ----------
     else if(section === "purchase"){
-
         // if already open → confirm close
         if(!purchase.classList.contains("hidden")){
             let confirmClose = confirm("⚠️ Exit purchase?");
@@ -143,12 +323,10 @@ function openSection(section){
             }
             return;
         }
-
         history.classList.add("hidden");
         purchase.classList.remove("hidden");
     }
 }
-
 // Show Add Medicine Form
 document.querySelector(".add_med_button").addEventListener("click", () => {
     document.querySelector(".add_medicine").classList.remove("hidden");
@@ -157,9 +335,7 @@ document.querySelector(".add_med_button").addEventListener("click", () => {
 document.querySelector(".cancel").addEventListener("click", () => {
     let confirmCancel = confirm("Do you want to cancel?");
 
-    if (confirmCancel) {
-        document.querySelector(".add_medicine").classList.add("hidden");
-    }
+    if (confirmCancel) {document.querySelector(".add_medicine").classList.add("hidden");}
 });
 // Handle Add Medicine Form Submit
 document.querySelector(".add_medicine form").addEventListener("submit", function(e) {
@@ -174,31 +350,12 @@ document.querySelector(".add_medicine form").addEventListener("submit", function
     let expiry = document.getElementById("expiry_date").value;
     let category = document.getElementById("category").value;
     let company = document.getElementById("company_name").value;
-       
-    let today = new Date();                            /*Calculate expiry status*/ 
-    let expDate = new Date(expiry);
 
-    let diffTime = expDate - today;                             /*Difference in days*/
-    let diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-    let expiryStatus;
-
-    if (diffDays <= 0) {                            /* Logic:   expired → 0 days or less   expiring soon → within 30 days*/ 
-        expiryStatus = "Expired";
-    } else if (diffDays <= 30) {
-        expiryStatus = "Soon";
-    } else {
-        expiryStatus = "Safe";
-    }
-    // ===============================
+    let expiryStatus = getExpiryStatus(expiry);
     // 1. Add to Medicine Table
-    // ===============================
     let medTable = document.querySelector(".medicine table tbody");
 
     let newRow1 = medTable.insertRow();
-    let color = diffDays <= 0 ? "red" : diffDays <= 30 ? "orange" : "green";
-   
-
     newRow1.innerHTML = `
         <td>${medId}</td>
         <td>${company}</td>
@@ -207,16 +364,15 @@ document.querySelector(".add_medicine form").addEventListener("submit", function
         <td>${cost}</td>
         <td>${sell}</td>
         <td>${qty}</td>
-        <td style="color:${color}; font-weight:bold;">${expiryStatus}</td>
+        <td style=" font-weight:800;">${expiryStatus}</td>
         <td>
             <button class="edit">edit</button>
             <button class="delete">delete</button>
         </td>
     `;
-
-    // ===============================
+    applyExpiryColor(newRow1.cells[7]);
     // 2. Add to Stock History Table
-    // ===============================
+
     let stockTable = document.querySelector(".stock-history table tbody");
 
     today = new Date().toISOString().split("T")[0];
@@ -236,35 +392,107 @@ document.querySelector(".add_medicine form").addEventListener("submit", function
         <td>${expiry}</td>
         <td>${"N/A"}</td>
     `;
-    // ===============================
+    
     // Reset Form + Hide
-    // ===============================
+
     this.reset();
     document.querySelector(".add_medicine").classList.add("hidden");
 
     alert("Medicine Added Successfully!");
-
+    refreshSystem();
 });
 
+// stock purchase----------------------
+document.getElementById("savePurchase").addEventListener("click", function () {
+    let rows = document.querySelectorAll("#purchaseBody tr");
+    let supplierId = document.getElementById("supplierId").value;
 
+    let medTable = document.querySelector(".medicine tbody");
+    let stockTable = document.querySelector(".stock-history tbody");
 
-// stock purchase
+    let today = new Date().toISOString().split("T")[0];
 
+    rows.forEach(row => {
+        let medId = row.cells[0].querySelector("input").value;
+        let name = row.cells[1].querySelector("input").value;
+        let company = row.cells[2].querySelector("input").value;
+        let category = row.cells[3].querySelector("select").value;
+        let expiry = row.cells[4].querySelector("input").value;
+        let price = row.cells[5].querySelector("input").value;
+        let qty = parseInt(row.cells[6].querySelector("input").value) || 0;
+        if (!medId || !name || qty <= 0) return;
+        // 1. ADD TO STOCK HISTORY
+        let newRow = stockTable.insertRow();
+        newRow.innerHTML = `
+            <td>${medId}</td>
+            <td>${company}</td>
+            <td>${name}</td>
+            <td>${category}</td>
+            <td>${qty}</td>
+            <td>${today}</td>
+            <td>${expiry}</td>
+            <td>${supplierId}</td>
+        `;
+        // 2. CHECK IF MED EXISTS
+        let found = false;
+        let medRows = document.querySelectorAll(".medicine tbody tr");
 
-// ----------- SAMPLE SUPPLIER DATA (replace with backend later) ----------
-let suppliersTab = document.querySelector(".supplier table ")
+        medRows.forEach(medRow => {
+            let existingId = medRow.cells[0].textContent.trim();
+            if (existingId === medId) {
+                found = true;
+                let currentQty = parseInt(medRow.cells[6].textContent) || 0;
+                let newQty = currentQty + qty;
+                medRow.cells[6].textContent = newQty;
+                // UPDATE EXPIRY STATUS
+                let status = getExpiryStatus(expiry);
+                medRow.cells[7].textContent = status;
+                applyStockStyle(medRow, newQty);
+                applyExpiryColor(medRow.cells[7]); 
+            }
+        });
+        // 3. IF NOT FOUND → ADD NEW
+        if (!found) {
+            let newRowMed = medTable.insertRow();
+            let status = getExpiryStatus(expiry);
+            newRowMed.innerHTML = `
+                <td>${medId}</td>
+                <td>${company}</td>
+                <td>${name}</td>
+                <td>${category}</td>
+                <td>${price}</td>
+                <td>0</td>
+                <td>${qty}</td>
+                <td style=" font-weight:800;">${status}</td>
+                <td>
+                    <button class="edit">edit</button>
+                    <button class="delete">delete</button>
+                </td>
+            `;
+            applyExpiryColor(newRowMed.cells[7]);
+            applyStockStyle(newRowMed, qty);  /* definition present at the start */
+        }
+    });
+    alert("Purchase Saved & Stock Updated!");
+    refreshSystem();
+});
 
-// Load supplier dropdown
-function loadSuppliers(){
+/////////////
+
+let suppliersTab = document.querySelector(".supplier table")
+function loadSuppliers() {
     let select = document.getElementById("supplierId");
+    let suppliersTab = document.querySelector(".supplier tbody");
     select.innerHTML = "<option value=''>Select</option>";
-    for (let i = 1; i < suppliersTab.rows.length; i++) {
-      let firstCell = suppliersTab.rows[i].cells[0].textContent.trim();
-      let opt = document.createElement("option");
-      opt.value = firstCell;
-      opt.textContent = firstCell;
-      select.appendChild(opt);
-    }
+    let rows = suppliersTab.querySelectorAll("tr");
+    rows.forEach(row => {
+        let id = row.cells[0].textContent.trim();
+        let name = row.cells[1].textContent.trim();
+        let opt = document.createElement("option");
+        opt.value = id;
+        opt.textContent = `${id} - ${name}`;
+        select.appendChild(opt);
+    });
 }
 
 // Auto fill supplier name
@@ -276,9 +504,6 @@ function fillSupplierName(){
         }
     }
 }
-
-
-
 // ----------- ADD ROW FUNCTION ----------
 document.getElementById("addRowPurchase").onclick = function(){
     let table = document.getElementById("purchaseBody");
@@ -310,10 +535,8 @@ document.getElementById("addRowPurchase").onclick = function(){
 };
 
 
-
-
 // ----------- REMOVE ROW ----------
-function removeRow(btn){
+function removeRow(btn){        /* inventory */
     btn.parentElement.parentElement.remove();
     calculateSummary();
 }
@@ -368,28 +591,6 @@ document.getElementById("clearPurchase").onclick = function(){
 loadSuppliers();
 
 /* billing and report =================================================================================== */
-// /
-// let medTab = document.querySelector(".medicine table ")
-// function loadmedicine(){
-//     let select = document.getElementsByClassName("medId");
-//     select.innerHTML = "<option value=''>Select</option>";
-//     for (let i = 1; i < medTab.rows.length; i++) {
-//       let firstCell = medTab.rows[i].cells[0].textContent.trim();
-//       let opt = document.createElement("option");
-//       opt.value = firstCell;
-//       opt.textContent = firstCell;
-//       select.appendChild(opt);
-//     }
-// }
-// function fillMedicineName(){
-//     let id = document.getElementsByClassName("medId");
-//     for (let i = 1; i < medTab.rows.length; i++) {
-//         if(id === medTab.rows[i].cells[0].textContent){
-//             document.getElementById("medname").value = medTab.rows[i].cells[1].textContent
-//         }
-//     }
-// }
-// loadmedicine();
 document.getElementById("add").addEventListener("click", addItem);
 function addItem() {
     let table = document.querySelector(".medicine-table");
@@ -402,20 +603,65 @@ function addItem() {
     let cell5 = row.insertCell(4);
     let cell6 = row.insertCell(5);
     let cell7 = row.insertCell(6);
+    let cell8 = row.insertCell(7);
+    let cell9 = row.insertCell(8);
     
-    cell1.innerHTML = '<input type="number">';
+    cell1.innerHTML = '<select class="medId" onchange="fillMedDetail(this)"><select>';
     cell2.innerHTML = '<input type="text">';
-    cell3.innerHTML = '<input type="number" class="qty">';
-    cell4.innerHTML = '<input type="number" class="price">';
-    cell5.innerHTML = '<input type="number" class="GST">';
-    cell6.innerHTML = '0';
-    cell6.classList.add("total");
-    
-    cell7.innerHTML = '<button class="remove" onclick="removeRow(this)">Remove</button>';
+    cell3.innerHTML = '<input type="text">';
+    cell4.innerHTML = '<input type="text">';
+    cell5.innerHTML = '<input type="number" class="qty">';
+    cell6.innerHTML = '<input type="number" class="price">';
+    cell7.innerHTML = '<input type="number" class="GST">';
+    cell8.innerHTML = '0';
+    cell8.classList.add("total");
+    cell9.innerHTML = '<button class="remove" onclick="removeBillRow(this)">Remove</button>';
+    loadMed();
 };
-function removeRow(btn) {
+function removeBillRow(btn) {     /* billing */
     let row = btn.parentNode.parentNode;
     row.remove();
+}
+// loadMed() calls at line 815
+function loadMed() {
+    let selects = document.querySelectorAll(".medId");
+    let MedTab = document.querySelector(".medicine table");
+
+    selects.forEach(select => {
+        let selectedValue = select.value; // ✅ store old value
+
+        select.innerHTML = "<option value=''>Select</option>";
+
+        for (let i = 1; i < MedTab.rows.length; i++) {
+            let id = MedTab.rows[i].cells[0].textContent.trim();
+
+            let opt = document.createElement("option");
+            opt.value = id;
+            opt.textContent = id;
+
+            // ✅ restore selection
+            if (id === selectedValue) {
+                opt.selected = true;
+            }
+
+            select.appendChild(opt);
+        }
+    });
+}
+// // auto fill med name company name
+function fillMedDetail(selectEl) {
+    let id = selectEl.value;
+    let row = selectEl.closest("tr");
+    let MedTab = document.querySelector(".medicine table");
+
+    for (let i = 1; i < MedTab.rows.length; i++) {
+        if (id === MedTab.rows[i].cells[0].textContent.trim()) {
+            row.cells[1].children[0].value = MedTab.rows[i].cells[1].textContent.trim();
+            row.cells[2].children[0].value = MedTab.rows[i].cells[2].textContent.trim();
+            row.cells[3].children[0].value = MedTab.rows[i].cells[3].textContent.trim();
+            row.cells[5].children[0].value = MedTab.rows[i].cells[5].textContent.trim();
+        }
+    }
 }
 //calculte bill-------------------------------
 
@@ -458,32 +704,40 @@ document.getElementById("save").addEventListener("click", function(){
     updateStock();
     saveBill();
 });
-
 function updateStock() {
     let billingRows = document.querySelectorAll(".medicine-table tr");
-    let medTableRows = document.querySelectorAll(".medicine table tbody tr");
+    let medRows = document.querySelectorAll(".medicine tbody tr");
     billingRows.forEach((row, index) => {
         if (index === 0) return; // skip header
-        let medId = row.cells[0].querySelector("input")?.value;
-        let qtySold = parseInt(row.cells[6].querySelector("input")?.value) || 0;
+        let medId = row.cells[0].querySelector("select")?.value;
+        let qtySold = parseInt(row.cells[4].querySelector("input")?.value) || 0;
         if (!medId || qtySold <= 0) return;
-        // Find matching medicine in medicine table
-        medTableRows.forEach(medRow => {
-            let tableMedId = medRow.cells[0].innerText;
-            if (tableMedId.toLowerCase() === medId.toLowerCase()) {
-                let currentQty = parseInt(medRow.cells[6].innerText) || 0;
+        // Find matching medicine row
+        medRows.forEach(medRow => {
+            let tableMedId = medRow.cells[0].textContent.trim();
+            if (medId === tableMedId) {
+                let qtyCell = medRow.cells[6];
+                let currentQty = parseInt(qtyCell.textContent) || 0;
                 if (currentQty >= qtySold) {
                     let newQty = currentQty - qtySold;
-                    medRow.cells[6].innerText = newQty;
+                    qtyCell.textContent = newQty;
+                    // ✅ Update stock status (like expiry)
+                    // let statusCell = medRow.cells[6];
+                    // if (newQty <= 20) {                       
+                    //     statusCell.style.color = "red";
+                    // } else if (newQty <= 50) {
+                    //     statusCell.style.color = "orange";
+                    // } else {
+                    //     statusCell.style.color = "green";
+                    // }
                 } else {
-                alert(`Not enough stock for ${medId}`);
+                    alert(`Not enough stock for Med ID: ${medId}`);
                 }
             }
         });
-
     });
-}  
-
+    refreshSystem();
+}
 function saveBill() {
     //  Customer Details
     let cname = document.getElementById("cname").value;
@@ -495,15 +749,19 @@ function saveBill() {
     for (let i = 1; i < table.rows.length; i++) {
         let row = table.rows[i];
         let id = row.cells[0].children[0].value;
-        let name = row.cells[1].children[0].value;
-        let qty = row.cells[2].children[0].value;
-        let price = row.cells[3].children[0].value;
-        let gst = row.cells[4].children[0].value;
-        let total = row.cells[5].innerText;
+        let com = row.cells[1].children[0].value;
+        let name = row.cells[2].children[0].value;
+        let cat = row.cells[3].children[0].value;
+        let qty = row.cells[4].children[0].value;
+        let price = row.cells[5].children[0].value;
+        let gst = row.cells[6].children[0].value;
+        let total = row.cells[7].innerText;
         if (name !== "") {
             items.push({
                 medicineId: id,
+                company: com,
                 medicine: name,
+                category: cat,
                 quantity: qty,
                 price: price,
                 gst: gst,
@@ -530,15 +788,17 @@ function saveBill() {
             gstTotal: gstTotal,
             grandTotal: grandTotal
         }
-    };    
+    };
+
     //  Save in localStorage
     let allBills = JSON.parse(localStorage.getItem("bills")) || [];
     allBills.push(bill);    
     localStorage.setItem("bills", JSON.stringify(allBills));   
     alert(" Bill Saved Successfully!");
+    applyStockStyle(newRowMed, qty);
+    refreshSystem();
 }
-//clear-----------------------------------------------------------------------
-
+//clear------------------------
 document.getElementById("clear").addEventListener("click", clearBill);
 function clearBill() {    
     //  Customer details clear
@@ -547,9 +807,7 @@ function clearBill() {
     document.getElementById("cdate").value = "";    
     //  Table reset (sirf 1 row chhodkar baaki delete)
     let table = document.querySelector(".medicine-table");    
-    while (table.rows.length > 2) {
-        table.deleteRow(1);
-    }    
+    while (table.rows.length > 2) {table.deleteRow(1);}  
     //  First row inputs clear
     let firstRow = table.rows[1];
     firstRow.cells[0].children[0].value = "";
@@ -557,7 +815,9 @@ function clearBill() {
     firstRow.cells[2].children[0].value = "";
     firstRow.cells[3].children[0].value = "";
     firstRow.cells[4].children[0].value = "";
-    firstRow.cells[5].innerText = "0";    
+    firstRow.cells[5].children[0].value = "";
+    firstRow.cells[6].children[0].value = "";
+    firstRow.cells[7].innerText = "0";    
     //  Payment summary reset
     document.getElementById("subtotal").innerText = "0.00 rs.";
     document.getElementById("Discount").innerText = "0.00 rs.";
@@ -565,19 +825,16 @@ function clearBill() {
     document.getElementById("grandT").innerText = "0.00 rs.";    
     //  Discount input clear
     document.getElementById("discountInput").value = "";
-    
     alert(" Cleared Successfully!");
 }
-
-
-// discount--------------------------------------------------------------------------
+// discount----------------
 document.getElementById("discountInput").addEventListener("input", applyDiscount);
 
 function applyDiscount() {
     let subtotal = parseFloat(document.getElementById("subtotal").innerText) || 0;
     let gstTotal = parseFloat(document.getElementById("total").innerText) || 0;
     let discountPercent = parseFloat(document.getElementById("discountInput").value) || 0;
-    let discountAmount = (subtotal * discountAmount)/100;
+    let discountAmount = (subtotal * discountPercent)/100;
     //  Discount show karo
     document.getElementById("Discount").innerText = discountAmount.toFixed(2) + " rs.";    
     //  Grand Total update
@@ -585,7 +842,7 @@ function applyDiscount() {
     document.getElementById("grandT").innerText = grandTotal.toFixed(2) + " rs.";
 }
 
-/* supplier =================================================================================== */
+/* ====================================================supplier =============================================== */
 document.addEventListener('DOMContentLoaded', () => {
 
     const tableBody = document.querySelector('.supplier tbody');
@@ -595,15 +852,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelBtn = popup.querySelector('.s-cancel');
     const okBtn = popup.querySelector('.s-ok');
 
-    let editRow = null;
-
+     loadSuppliers();
     //  OPEN POPUP (ADD)
     addBtn.addEventListener('click', () => {
         popup.style.display = 'block';
-        editRow = null;
         form.reset();
     });
-
     //  CANCEL BUTTON
     cancelBtn.addEventListener('click', () => {
         let confirmCancel = confirm("Do you want to cancel?");
@@ -612,35 +866,18 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
      }
     });
-
-    //  EDIT and DELETE
+    //  DELETE
     tableBody.addEventListener('click', (e) => {
-
-        // EDIT
-        if (e.target.classList.contains('edit')) {
-            editRow = e.target.closest('tr');
-            const cells = editRow.querySelectorAll('td');
-
-            document.getElementById('supplier-id').value = cells[0].textContent.replace('#','');
-            document.getElementById('supplier-name').value = cells[1].textContent;
-            document.getElementById('s-contact').value = cells[2].textContent;
-            document.getElementById('s-email').value = cells[3].textContent;
-            document.getElementById('s-address').value = cells[4].textContent;
-            document.getElementById('s-pincode').value = cells[5].textContent;
-            popup.style.display = 'block';
-        }
-
         // DELETE
         if (e.target.classList.contains('delete')) {
             let confirmCancel = confirm("Do you want to cancel?");
             if (confirmCancel) {
                 e.target.closest('tr').remove();
+                loadSuppliers();
             }
         }
-
     });
-
-    //  OK BUTTON (ADD + UPDATE)
+    //  OK BUTTON ( ADD)
     okBtn.addEventListener('click', (e) => {
         e.preventDefault();
         const id = document.getElementById('supplier-id').value;
@@ -649,42 +886,59 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('s-email').value;
         const address = document.getElementById('s-address').value;
         const pincode = document.getElementById('s-pincode').value;
-        if (editRow) {
-            // UPDATE
-            const cells = editRow.querySelectorAll('td');
-            cells[0].textContent = '#' + id;
-            cells[1].textContent = name;
-            cells[2].textContent = contact;
-            cells[3].textContent = email;
-            cells[4].textContent = address;
-            cells[5].textContent = pincode;
-        } else {
-            // ADD
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td>#${id}</td>
-                <td>${name}</td>
-                <td>${contact}</td>
-                <td>${email}</td>
-                <td>${address}</td>
-                <td>${pincode}</td>
-                <td>${"N/A"}</td>
-                <td>
-                    <button class="edit">Edit</button>
-                    <button class="delete">Delete</button>
-                </td>
-            `;
-            tableBody.appendChild(newRow);
-        }
-
+        
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>$${id}</td>
+            <td>${name}</td>
+            <td>${contact}</td>
+            <td>${email}</td>
+            <td>${address}</td>
+            <td>${pincode}</td>
+            <td>
+                <button class="delete">Delete</button>
+            </td>
+        `;
+        tableBody.appendChild(newRow);
+        loadSuppliers();
+        
         popup.style.display = 'none';
         form.reset();
     });
 
 });
-
-
-
-
-
-
+// ==================================================setting================================================
+function togglePassword() {
+    let fields = ["old-pass", "new-pass", "confirm-pass"];
+    fields.forEach(function(id) {
+        let input = document.getElementById(id);
+        if (input.type === "password") {input.type = "text";}
+        else {input.type = "password";}
+    });
+}
+// PHOTO FUNCTIONS
+function uploadPhoto(event) {
+    let file = event.target.files[0];
+    if (file) {alert("Selected: " + file.name);}
+}
+function updatePhoto() {alert("Photo Updated Successfully!");} 
+function removePhoto() {alert("Photo Removed!");}
+// SAVE SETTINGS
+function saveSettings() {    alert("Settings Saved!");}
+// LOGOUT
+function logout() {
+    alert("Logged Out!");
+    window.location.href = "login.php"; // change if needed
+}
+document.addEventListener("DOMContentLoaded", function () {
+    let darkToggle = document.querySelectorAll('.right input[type="checkbox"]')[0];
+    if (darkToggle) {
+        darkToggle.addEventListener("change", function () {
+            document.body.classList.toggle("dark", this.checked);
+        });
+    }
+});
+// ========================================================================================================================
+document.addEventListener("DOMContentLoaded", function () {
+    updateDashboardStock();applyStockStatus();loadSuppliers();loadMed();applyStockStyle();
+});

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,7 +113,7 @@
                         <hr>
                         <h3>0</h3>
                     </div>
-                    <div class="low-stock">
+                    <div class="low-stock"  onclick="showLowStock()">
                         <p>Stock alert</p>
                         <hr>
                         <h3>0</h3>
@@ -122,6 +123,19 @@
                         <hr>
                         <h3>0</h3>
                     </div>
+                </div>
+                <div id="stockListBox">
+                    <h3>⚠️ Stock Alert</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Med ID</th>
+                                <th>Medicine Name</th>
+                                <th>Available Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockList"></tbody>
+                    </table>
                 </div>
             </div>
                 <!-- --------------------medicines--------------- -->
@@ -151,11 +165,16 @@
                             <td>105</td>
                             <td>5</td>
                             <td>soon</td>
-                            <td><button class="edit">edit</button><button class="delete">delete</button></td>
+                            <td><button class="edit" onclick="editMedicine(this)">edit</button><button class="delete" onclick="deleteMedicine(this)">delete</button></td>
                         </tr>
                     </tbody>
                 </table>
                 
+            </div>
+            <div id="confirmBox">
+                <p id="confirmMsg">Are you sure?</p>
+                <button onclick="confirmYes()">Yes</button>
+                <button onclick="confirmNo()">No</button>
             </div>
             
 
@@ -207,6 +226,7 @@
                         </tbody>
                     </table> 
                 </div>
+                <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
                 <div class="stock-purchase hidden" id="stockPurchaseBox">
                     <h2>Stock Purchase</h2>
 
@@ -266,6 +286,7 @@
                     </div>
                                     
                 </div>
+                <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
                 <div class="add_medicine hidden">
                     <h3>Enter Medicine Details</h3>
                     <form action="" method="post">
@@ -337,16 +358,20 @@
                         <table class="medicine-table">
                             <tr>
                                 <th>Med_ID</th>
+                                <th>Company Name</th>
                                 <th>Medicine Name</th>
+                                <th>category</th>
                                 <th>Qty</th>
-                                <th>Price</th>
+                                <th>rate</th>
                                 <th>GST%</th>
                                 <th>Total</th>
                                 <th class="noprint">Action</th>
                             </tr>
                             <tr>
-                                <td><select class="medId" onchange="fillSupplierName()"></select></td>
+                                <td><select class="medId" onchange="fillMedDetail(this)"></td>
+                                <td><input id="comname" type="text"></td>
                                 <td><input id="medname" type="text"></td>
+                                <td><input id="cat" type="text"></td>
                                 <td><input type="number" class="qty"></td>
                                 <td><input type="number" class="price"></td>
                                 <td><input type="number" class="GST"></td>
@@ -411,7 +436,7 @@
                             <td>johndoe@abc.in</td>
                             <td>new york</td>
                             <td>404555</td>                            
-                            <td><button class="edit">Edit</button><button class="delete">Delete</button> </td>
+                            <td><button class="delete">Delete</button> </td>
 
                         </tr>
                     </tbody>
@@ -503,7 +528,7 @@
                              <div class="setting-section">
                                 <h3>App Settings</h3>  
                                 <div class="chkbx">
-                                    <label><input type="checkbox">Dark mode</label>
+                                    <label class="right"><input type="checkbox">Dark mode</label>
                                     <label><input type="checkbox">Notifications</label> 
                                 </div>  
                             </div>
