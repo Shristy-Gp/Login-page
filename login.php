@@ -20,12 +20,12 @@
       <div class="login">
         <div class="content">
           <h2>Login</h2>
-          <form action="">
+          <form action="login_process.php" method="POST">
             <div class="input">
-              <input type="text" placeholder="username" required />
+              <input type="text" name="username" placeholder="username" required />
             </div>
             <div class="input">
-              <input type="password" placeholder="password" required />
+              <input type="password" name="password" placeholder="password" required />
             </div>
             <div class="option">
               <label><input type="checkbox" required > Remember me</label>
@@ -40,18 +40,18 @@
 
          <div class="content1 hidden">
           <h2>Register</h2>
-          <form action="">
+          <form action="register.php" method="POST">
             <div class="input1">
-              <input type="text" placeholder="username" required />
+              <input type="text" name="username" placeholder="username" required />
             </div>
              <div class="input1">
-              <input type="email" placeholder="Email Id" required />
+              <input type="email" name="email" placeholder="Email Id" required />
             </div>
             <div class="input1">
-              <input type="password" placeholder="password" required />
+              <input type="password" name="password" placeholder="password" required />
             </div>
             <div class="input1">
-              <input type="password" placeholder="Confirm password" required />
+              <input type="password" name="confirm_password" placeholder="Confirm password" required />
             </div>
             <div class="terms">
               <label><input type="checkbox" >I agree to the terms & conditions.</label>

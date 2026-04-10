@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if(!isset($_SESSION['username'])){
+    header("Location: login.php");
+    exit();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -548,7 +556,8 @@
                         </div>
                         <div class="save-and-log">
                             <button class="save-changes" onclick="saveSettings()">Save Changes</button>
-                            <button class="logout" onclick="logout()">Logout</button>
+                            <!-- <button class="logout" onclick="logout()">Logout</button> -->
+                             <a href="logout.php" class="logout-btn">Logout</a>
                         </div>
                     </div>
 

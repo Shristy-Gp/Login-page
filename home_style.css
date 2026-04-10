@@ -704,12 +704,22 @@ table .edit{background-color: #233878;}
     transform: scale(1.01);
 }
 /* Logout button */
-.save-changes, .logout{
+.save-changes/*, .logout*/{
     width: 150px; padding: 5px; margin-top: 10px;
     color: white; border: none; border-radius: 6px;
     cursor: pointer; font-weight: 700; font-size: 15px; height: 40px;
     box-sizing: border-box; background: linear-gradient(135deg, #203061, #233878);
 }
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+.logout-btn:hover {background-color: #c82333;}
+
 /* Show password */
 .show-pass {margin-top: 7px;}
 
@@ -862,8 +872,6 @@ table .edit{background-color: #233878;}
 .dark .profile-right .aa {
     color: #cccccc;
 }
-
-
 
 .hidden{
     display : none ;
